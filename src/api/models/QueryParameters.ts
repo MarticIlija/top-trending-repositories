@@ -1,6 +1,6 @@
-import { SearchParameters } from "..";
+import { SearchParameters, SearchResponse } from "..";
 
 export interface QueryParameters {
   searchParams: SearchParameters;
-  setter: React.Dispatch<React.SetStateAction<undefined>>;
+  setter: React.Dispatch<React.SetStateAction<SearchResponse | undefined>>;
 }

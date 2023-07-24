@@ -10,8 +10,8 @@ export const DescriptionItem = ({
   const direction = "flex-" + orientation;
   return (
     <div className={clsx(`flex`, direction, className)}>
-      <p className="typo-medium-300">{title}</p>&nbsp;
-      <p className="typo-regular-300">{content}</p>
+      <p className="prose font-bold">{title}</p>
+      <p className="prose font-medium ml-2">{content}</p>
     </div>
   );
 };
