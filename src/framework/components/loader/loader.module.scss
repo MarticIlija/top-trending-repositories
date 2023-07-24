@@ -1,0 +1,47 @@
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #eff2f5;
+  border-radius: 100%;
+  border-right: 8px solid #3a85f8;
+  width: 64px;
+  height: 64px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform-origin: center;
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform-origin: center;
+    transform: rotate(360deg);
+  }
+}
+
+.svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.svgCircleBg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: none;
+  stroke: #eff2f5;
+}
+
+.svgCircle {
+  fill: none;
+  border: 8px solid #eff2f5;
+  border-radius: 100%;
+  transition: stroke-dashoffset 850ms ease-in-out;
+  animation: spin 2s linear infinite;
+  stroke: #3a85f8;
+}
