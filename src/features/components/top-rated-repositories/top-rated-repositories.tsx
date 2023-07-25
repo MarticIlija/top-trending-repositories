@@ -8,8 +8,10 @@ import { Filter } from "../../../framework/components/filter/filter";
 import { getRepositoriesActions } from "../repositories/actions";
 import { FilterChips } from "../../../framework/components/filter-chips/filter-chips";
 import { Divider } from "../../../framework/components/divider/divider";
-import { listOrder } from "../../../common/constants/list-order";
+import { filterOrder } from "../../../common/constants/filter-order";
 import { Order } from "../../../common/enums/Order";
+import { filterOptions } from "../../../common/constants/filter-options";
+import { Options } from "../../../common/enums/Options";
 
 const { getFilterLanguages } = getRepositoriesActions();
 
@@ -17,6 +19,7 @@ export const TopRatedRepositories = () => {
   const [repositories, setRepositories] = useState<SearchResponse>();
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState(Order.ASCENDING);
+  const [selectedOption, setSelectedOption] = useState(Options.ALL);
 
   useEffect(() => {
     getRepositories({
@@ -48,6 +51,10 @@ export const TopRatedRepositories = () => {
     setSelectedOrder(order);
   };
 
+  const repositoriesFilterClickHandler = (option: Options) => {
+    setSelectedOption(option);
+  };
+
   return (
     <>
       <ApplicationLoader show={isEmpty(repositories)} />
@@ -62,9 +69,16 @@ export const TopRatedRepositories = () => {
           <Divider />
           <FilterChips
             title="Order:"
-            elements={listOrder}
+            elements={filterOrder}
             selectedElements={[selectedOrder]}
             clickHandler={orderClickHandler}
+          />
+          <Divider />
+          <FilterChips
+            title="Repositories:"
+            elements={filterOptions}
+            selectedElements={[selectedOption]}
+            clickHandler={repositoriesFilterClickHandler}
           />
         </Filter>
         <Repositories repositories={repositories} />
