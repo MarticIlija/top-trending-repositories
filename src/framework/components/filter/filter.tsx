@@ -3,13 +3,8 @@ import { FilterIcon } from "../../icons";
 import { FilterWrapper } from "../filter-wrapper/filter-wrapper";
 import { IconButton } from "../icon-button/icon-button";
 import { FilterProps } from "./types";
-import { FilterChips } from "../filter-chips/filter-chips";
 
-export const Filter = ({
-  elements,
-  selectedElements,
-  clickHandler,
-}: FilterProps) => {
+export const Filter = ({ children }: FilterProps) => {
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   return (
@@ -31,12 +26,7 @@ export const Filter = ({
         isFilterOpen={isFilterOpen}
         className="text-[#3a85f8]"
       >
-        <FilterChips
-          title="Languages:"
-          elements={elements}
-          selectedElements={selectedElements}
-          clickHandler={clickHandler}
-        />
+        {children}
       </FilterWrapper>
     </>
   );

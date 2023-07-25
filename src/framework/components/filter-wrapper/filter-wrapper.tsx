@@ -19,7 +19,7 @@ export const FilterWrapper = ({
             title={title as string}
             onUpdate={onClick}
             crossIcon={false}
-            className="z-50 p-0 md:p-2"
+            className="md:p-2"
             open={true}
           >
             {children}
