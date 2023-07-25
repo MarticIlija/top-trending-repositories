@@ -27,4 +27,5 @@ export enum LanguagesEnum {
   SWIFT = "SWIFT",
   TYPESCRIPT = "TYPESCRIPT",
   VERILOG = "VERILOG",
+  VUE = "VUE",
 }
