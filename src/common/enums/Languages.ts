@@ -16,6 +16,7 @@ export enum LanguagesEnum {
   KOTLIN = "KOTLIN",
   MAKEFILE = "MAKEFILE",
   NODEJS = "NODEJS",
+  PASCAL = "PASCAL",
   PHP = "PHP",
   POWERSHELL = "POWERSHELL",
   PYTHON = "PYTHON",
@@ -28,4 +29,5 @@ export enum LanguagesEnum {
   TYPESCRIPT = "TYPESCRIPT",
   VERILOG = "VERILOG",
   VUE = "VUE",
+  OTHER = "OTHER",
 }

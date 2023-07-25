@@ -1,37 +1,50 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Items, SearchResponse } from "../../../api";
 import { getRepositories } from "../../server/api-handlers";
 import { Repositories } from "../repositories/repositories";
 import { isEmpty } from "lodash";
 import { ApplicationLoader } from "../../../framework/components/application-loader/application-loader";
 import { Filter } from "../../../framework/components/filter/filter";
-import { getRepositoriesActions } from "../repositories/actions";
 import { FilterChips } from "../../../framework/components/filter-chips/filter-chips";
 import { Divider } from "../../../framework/components/divider/divider";
 import { filterOrder } from "../../../common/constants/filter-order";
 import { Order } from "../../../common/enums/Order";
 import { filterOptions } from "../../../common/constants/filter-options";
 import { Options } from "../../../common/enums/Options";
+import { Pagination } from "../../../framework/components/pagination/pagination";
+import { getTopRatedRepositoriesActions } from "./actions";
 
-const { getFilterLanguages } = getRepositoriesActions();
+const { getFilterLanguages, getRepositoriesByLanguage } =
+  getTopRatedRepositoriesActions();
 
 export const TopRatedRepositories = () => {
   const [repositories, setRepositories] = useState<SearchResponse>();
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedOrder, setSelectedOrder] = useState(Order.ASCENDING);
+  const [selectedOrder, setSelectedOrder] = useState(Order.DESCENDING);
+  const [page, setPage] = useState("1");
   const [selectedOption, setSelectedOption] = useState(Options.ALL);
+  const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
 
   useEffect(() => {
     getRepositories({
       searchParams: {
-        language: "python",
         order: selectedOrder,
+        page: page,
       },
       setter: setRepositories,
     });
-  }, [selectedOrder]);
+  }, [selectedOrder, page]);
 
-  const filterLanguages = getFilterLanguages(repositories?.items as Items[]);
+  useEffect(() => {
+    const filterLanguages = getFilterLanguages(repositories?.items as Items[]);
+    setFilterLanguages(filterLanguages);
+    setSelectedLanguages(filterLanguages);
+  }, [repositories]);
+
+  const filteredRepositories = useMemo(() => {
+    if (repositories)
+      return getRepositoriesByLanguage(selectedLanguages, repositories.items);
+  }, [selectedLanguages]);
 
   const languageClickHandler = useCallback(
     (language: string) => {
@@ -58,7 +71,8 @@ export const TopRatedRepositories = () => {
   return (
     <>
       <ApplicationLoader show={isEmpty(repositories)} />
-      <div className="flex flex-col gap-6 w-full h-full pb-28 pt-20 px-44 xl:px-48">
+      <div className="flex flex-col gap-6 w-full h-full pb-28 pt-20 px-44 xl:px-48 items-center justify-center">
+        <Pagination numberOfResults={repositories?.total_count as number} />
         <Filter>
           <FilterChips
             title="Languages:"
@@ -81,7 +95,7 @@ export const TopRatedRepositories = () => {
             clickHandler={repositoriesFilterClickHandler}
           />
         </Filter>
-        <Repositories repositories={repositories} />
+        <Repositories repositories={filteredRepositories} />
       </div>
     </>
   );

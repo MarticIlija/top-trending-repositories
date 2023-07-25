@@ -1,5 +1,5 @@
-import { SearchResponse } from "../../../api";
+import { Items } from "../../../api";
 
 export interface RepositoriesProps {
-  repositories?: SearchResponse;
+  repositories?: Items[];
 }

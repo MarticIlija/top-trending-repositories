@@ -4,12 +4,10 @@ import { QueryParameters, SearchParameters } from "../../api";
 import { OrderToStringMap } from "../../common/mappers/order-to-string-mapper";
 import { Order } from "../../common/enums/Order";
 
-const getUrl = ({ language, order = Order.DESCENDING }: SearchParameters) => {
+const getUrl = ({ order = Order.DESCENDING, page }: SearchParameters) => {
   const date = getWeekBeforePeriod();
   const searchOrder = OrderToStringMap[order];
-  let url = `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=${searchOrder}`;
-  if (language) url += `&language=${language}`;
-  return url;
+  return `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=${searchOrder}&per_page=30&page=${page}`;
 };
 
 export const getRepositories = ({ searchParams, setter }: QueryParameters) => {
