@@ -1,8 +1,15 @@
 import { Items } from "../../../api";
 import { LanguagesEnum } from "../../../common/enums/Languages";
 
-const getFilterLanguages = (items: Items[]) =>
-  items?.map((item) => item.language);
+const getFilterLanguages = (items: Items[]) => {
+  const languageSet: Set<string> = new Set();
+  items?.map((item) => {
+    if (item?.language) {
+      languageSet.add(item?.language);
+    } else languageSet.add("Other");
+  });
+  return Array.from(languageSet).sort();
+};
 
 const getLogoForLanguage = (language: string) => {
   const enumKey = language?.toUpperCase().replace(" ", "_");

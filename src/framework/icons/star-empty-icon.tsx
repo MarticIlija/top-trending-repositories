@@ -1,6 +1,10 @@
 import { IconProps } from "./types";
+import { FC } from "react";
 
-export const StarEmptyIcon = ({ iconSize = 24, ...props }: IconProps) => {
+export const StarEmptyIcon: FC<IconProps> = ({
+  iconSize = 24,
+  ...props
+}: IconProps) => {
   return (
     <svg
       width={iconSize}
