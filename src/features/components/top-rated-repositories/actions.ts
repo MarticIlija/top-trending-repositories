@@ -27,5 +27,8 @@ const getRepositoriesByLanguage = (
 };
 
 export const getTopRatedRepositoriesActions = () => {
-  return { getFilterLanguages, getRepositoriesByLanguage };
+  return {
+    getFilterLanguages,
+    getRepositoriesByLanguage,
+  };
 };

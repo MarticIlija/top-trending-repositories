@@ -1,7 +1,6 @@
-import { FC } from "react";
 import { IconProps } from "./types";
 
-export const FilterIcon: FC<IconProps> = ({ iconSize = 24, ...props }) => {
+export const FilterIcon = ({ iconSize = 24, ...props }: IconProps) => {
   return (
     <svg
       width={iconSize}

@@ -12,7 +12,7 @@ export const FilterWrapper = ({
   ...props
 }: FilterWrapperProps) => {
   return (
-    <div className={clsx("z-0 overflow-auto", className)} {...props}>
+    <div className={clsx("z-0 overflow-auto w-full", className)} {...props}>
       {isFilterOpen && (
         <AccordionGroup>
           <Accordion

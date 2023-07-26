@@ -1,7 +1,8 @@
 import { RESULTS_PER_PAGE } from "../../../common/constants/results-per-page";
 
 const getNumberOfPages = (numberOfResults: number) => {
-  return Math.ceil(numberOfResults / RESULTS_PER_PAGE);
+  if (!numberOfResults) return null;
+  else return Math.ceil(numberOfResults / RESULTS_PER_PAGE).toString();
 };
 
 export const getPaginationActions = () => {

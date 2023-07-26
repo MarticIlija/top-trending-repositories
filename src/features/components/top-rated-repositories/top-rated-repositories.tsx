@@ -13,6 +13,9 @@ import { filterOptions } from "../../../common/constants/filter-options";
 import { Options } from "../../../common/enums/Options";
 import { Pagination } from "../../../framework/components/pagination/pagination";
 import { getTopRatedRepositoriesActions } from "./actions";
+import { setStarredRepositories } from "../../lib/set-starred-repositories";
+import { deleteStarredRepositories } from "../../lib/delete-starred-repositories";
+import { getStarredRepositories } from "../../lib/get-starred-repositories";
 
 const { getFilterLanguages, getRepositoriesByLanguage } =
   getTopRatedRepositoriesActions();
@@ -24,6 +27,9 @@ export const TopRatedRepositories = () => {
   const [page, setPage] = useState("1");
   const [selectedOption, setSelectedOption] = useState(Options.ALL);
   const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
+  const [selectedRepositories, setSelectedRepositories] = useState<Items[]>([]);
+  const [fetchTrigger, setFetchTrigger] = useState(false);
+  const starredRepositories = getStarredRepositories();
 
   useEffect(() => {
     getRepositories({
@@ -33,18 +39,26 @@ export const TopRatedRepositories = () => {
       },
       setter: setRepositories,
     });
-  }, [selectedOrder, page]);
+  }, [page]);
 
   useEffect(() => {
     const filterLanguages = getFilterLanguages(repositories?.items as Items[]);
     setFilterLanguages(filterLanguages);
     setSelectedLanguages(filterLanguages);
+    setSelectedRepositories(repositories?.items as Items[]);
   }, [repositories]);
 
   const filteredRepositories = useMemo(() => {
-    if (repositories)
-      return getRepositoriesByLanguage(selectedLanguages, repositories.items);
-  }, [selectedLanguages]);
+    if (selectedRepositories)
+      return getRepositoriesByLanguage(selectedLanguages, selectedRepositories);
+  }, [selectedLanguages, selectedRepositories, fetchTrigger]);
+
+  useEffect(() => {
+    if (selectedOption === "All")
+      setSelectedRepositories(repositories?.items as Items[]);
+    else if (selectedOption === "Starred only")
+      setSelectedRepositories(starredRepositories);
+  }, [selectedOption, fetchTrigger]);
 
   const languageClickHandler = useCallback(
     (language: string) => {
@@ -68,10 +82,20 @@ export const TopRatedRepositories = () => {
     setSelectedOption(option);
   };
 
+  const addStarredHandler = (repository: Items) => {
+    setStarredRepositories(repository);
+    setFetchTrigger(!fetchTrigger);
+  };
+
+  const removeStarredHandler = (repository: Items) => {
+    deleteStarredRepositories(repository);
+    setFetchTrigger(!fetchTrigger);
+  };
+
   return (
     <>
       <ApplicationLoader show={isEmpty(repositories)} />
-      <div className="flex flex-col gap-6 w-full h-full pb-28 pt-20 px-44 xl:px-48 items-center justify-center">
+      <div className="flex flex-col gap-6 w-full h-full pb-28 pt-6 px-44 xl:px-48 items-center justify-center">
         <Pagination numberOfResults={repositories?.total_count as number} />
         <Filter>
           <FilterChips
@@ -95,7 +119,11 @@ export const TopRatedRepositories = () => {
             clickHandler={repositoriesFilterClickHandler}
           />
         </Filter>
-        <Repositories repositories={filteredRepositories} />
+        <Repositories
+          repositories={filteredRepositories}
+          addStarredHandler={addStarredHandler}
+          removeStarredHandler={removeStarredHandler}
+        />
       </div>
     </>
   );

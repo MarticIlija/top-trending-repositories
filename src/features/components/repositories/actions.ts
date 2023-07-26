@@ -1,11 +1,30 @@
+import { isEmpty } from "lodash";
+import { getStarredRepositories } from "../../lib/get-starred-repositories";
+import { Items } from "../../../api";
+import { LanguagesEnum } from "../../../common/enums/Languages";
+
 const getLogoForLanguage = (language: string) => {
-  if (language) {
+  const enumKey = language?.toUpperCase().replace(" ", "_");
+  if (LanguagesEnum[enumKey as keyof typeof LanguagesEnum]) {
     const noSpaceLanguage = language.replace(/\s+/g, "");
     const logoName = noSpaceLanguage.toLowerCase().replace("#", "_");
     return `src/assets/img/${logoName}.png`;
   } else return "src/assets/img/other.png";
 };
 
+const checkIfRepositoryIsStarred = (repository: Items) => {
+  const starredRepositories = getStarredRepositories();
+  if (isEmpty(starredRepositories) || !Array.isArray(starredRepositories))
+    return false;
+  else {
+    return Boolean(
+      starredRepositories?.find(
+        (starredRepository) => starredRepository.id === repository.id
+      )
+    );
+  }
+};
+
 export const getRepositoriesActions = () => {
-  return { getLogoForLanguage };
+  return { getLogoForLanguage, checkIfRepositoryIsStarred };
 };

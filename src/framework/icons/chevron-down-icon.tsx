@@ -1,7 +1,6 @@
 import { IconProps } from "./types";
-import { FC } from "react";
 
-export const ChevronDownIcon: FC<IconProps> = ({ iconSize = 24, ...props }) => {
+export const ChevronDownIcon = ({ iconSize = 24, ...props }: IconProps) => {
   return (
     <svg
       width={iconSize}

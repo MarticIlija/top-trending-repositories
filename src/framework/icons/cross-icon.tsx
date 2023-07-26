@@ -1,7 +1,6 @@
 import { IconProps } from "./types";
-import { FC } from "react";
 
-export const CrossIcon: FC<IconProps> = ({ iconSize = 24, ...props }) => {
+export const CrossIcon = ({ iconSize = 24, ...props }: IconProps) => {
   return (
     <svg
       width={iconSize}
