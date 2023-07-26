@@ -14,16 +14,19 @@ const getRepositoriesByLanguage = (
   languages: string[],
   repositories: Items[]
 ) => {
-  const filteredRepositories = languages.map((language) => {
-    if (language !== "Other") {
-      return repositories?.filter(
-        (repository) => repository?.language === language
-      );
-    } else {
-      return repositories?.filter((repository) => !repository?.language);
-    }
-  });
-  return filteredRepositories.flat();
+  const filteredRepositories = languages
+    .map((language) => {
+      if (language !== "Other") {
+        return repositories?.filter(
+          (repository) => repository?.language === language
+        );
+      } else {
+        return repositories?.filter((repository) => !repository?.language);
+      }
+    })
+    .flat();
+  filteredRepositories.sort((a, b) => b.stargazers_count - a.stargazers_count);
+  return filteredRepositories;
 };
 
 export const getTopRatedRepositoriesActions = () => {
