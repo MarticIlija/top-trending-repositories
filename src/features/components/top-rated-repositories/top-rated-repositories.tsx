@@ -11,7 +11,7 @@ import { filterOrder } from "../../../common/constants/filter-order";
 import { Order } from "../../../common/enums/Order";
 import { filterOptions } from "../../../common/constants/filter-options";
 import { Options } from "../../../common/enums/Options";
-import { Pagination } from "../../../framework/components/pagination/pagination";
+import { PaginationControlled } from "../../../framework/components/pagination/pagination";
 import { getTopRatedRepositoriesActions } from "./actions";
 import { setStarredRepositories } from "../../lib/set-starred-repositories";
 import { deleteStarredRepositories } from "../../lib/delete-starred-repositories";
@@ -24,7 +24,7 @@ export const TopRatedRepositories = () => {
   const [repositories, setRepositories] = useState<SearchResponse>();
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState(Order.DESCENDING);
-  const [page, setPage] = useState("1");
+  const [page, setPage] = useState(1);
   const [selectedOption, setSelectedOption] = useState(Options.ALL);
   const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
   const [selectedRepositories, setSelectedRepositories] = useState<Items[]>([]);
@@ -35,7 +35,7 @@ export const TopRatedRepositories = () => {
     getRepositories({
       searchParams: {
         order: selectedOrder,
-        page: page,
+        page: page.toString(),
       },
       setter: setRepositories,
     });
@@ -96,7 +96,11 @@ export const TopRatedRepositories = () => {
     <>
       <ApplicationLoader show={isEmpty(repositories)} />
       <div className="flex flex-col gap-6 w-full h-full pb-28 pt-6 px-44 xl:px-48 items-center justify-center">
-        <Pagination numberOfResults={repositories?.total_count as number} />
+        <PaginationControlled
+          totalCount={repositories?.total_count as number}
+          page={page}
+          setPage={setPage}
+        />
         <Filter>
           <FilterChips
             title="Languages:"

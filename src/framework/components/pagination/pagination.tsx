@@ -1,9 +1,22 @@
-import { getPaginationActions } from "./actions";
+import * as React from "react";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import { PaginationProps } from "./types";
 
-const { getNumberOfPages } = getPaginationActions();
+export const PaginationControlled = ({
+  totalCount,
+  page,
+  setPage,
+}: PaginationProps) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
-export const Pagination = ({ numberOfResults }: PaginationProps) => {
-  const numberOfPages = getNumberOfPages(numberOfResults);
-  return <div className="prose font-medium">{numberOfPages}</div>;
+  return (
+    <Stack spacing={2}>
+      <Typography>Page: {page}</Typography>
+      <Pagination count={totalCount} page={page} onChange={handleChange} />
+    </Stack>
+  );
 };
