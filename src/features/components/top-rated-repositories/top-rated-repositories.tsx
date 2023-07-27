@@ -28,7 +28,7 @@ export const TopRatedRepositories = () => {
   const [selectedOption, setSelectedOption] = useState(Options.ALL);
   const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
   const [selectedRepositories, setSelectedRepositories] = useState<Items[]>([]);
-  const [fetchTrigger, setFetchTrigger] = useState(false);
+  const [renderTrigger, setRenderTrigger] = useState(false);
   const starredRepositories = getStarredRepositories();
 
   useEffect(() => {
@@ -39,26 +39,25 @@ export const TopRatedRepositories = () => {
       },
       setter: setRepositories,
     });
-  }, [page]);
+  }, [page, selectedOrder]);
 
   useEffect(() => {
-    const filterLanguages = getFilterLanguages(repositories?.items as Items[]);
-    setFilterLanguages(filterLanguages);
-    setSelectedLanguages(filterLanguages);
     setSelectedRepositories(repositories?.items as Items[]);
   }, [repositories]);
 
-  const filteredRepositories = useMemo(() => {
-    if (selectedRepositories)
-      return getRepositoriesByLanguage(selectedLanguages, selectedRepositories);
-  }, [selectedLanguages, selectedRepositories, fetchTrigger]);
+  useEffect(() => {
+    if (selectedOption === Options.ALL)
+      setSelectedRepositories(repositories?.items as Items[]);
+    else if (selectedOption === Options.STARRED_ONLY)
+      setSelectedRepositories(starredRepositories);
+  }, [selectedOption, renderTrigger]);
 
   useEffect(() => {
-    if (selectedOption === "All")
-      setSelectedRepositories(repositories?.items as Items[]);
-    else if (selectedOption === "Starred only")
-      setSelectedRepositories(starredRepositories);
-  }, [selectedOption, fetchTrigger]);
+    const filterLanguages = getFilterLanguages(selectedRepositories);
+    setFilterLanguages(filterLanguages);
+    setSelectedLanguages(filterLanguages);
+    setSelectedRepositories(selectedRepositories);
+  }, [selectedRepositories]);
 
   const languageClickHandler = useCallback(
     (language: string) => {
@@ -74,6 +73,11 @@ export const TopRatedRepositories = () => {
     [selectedLanguages]
   );
 
+  const filteredRepositories = useMemo(() => {
+    if (selectedRepositories)
+      return getRepositoriesByLanguage(selectedLanguages, selectedRepositories);
+  }, [selectedLanguages, selectedRepositories, renderTrigger]);
+
   const orderClickHandler = (order: Order) => {
     setSelectedOrder(order);
   };
@@ -84,12 +88,12 @@ export const TopRatedRepositories = () => {
 
   const addStarredHandler = (repository: Items) => {
     setStarredRepositories(repository);
-    setFetchTrigger(!fetchTrigger);
+    setRenderTrigger(!renderTrigger);
   };
 
   const removeStarredHandler = (repository: Items) => {
     deleteStarredRepositories(repository);
-    setFetchTrigger(!fetchTrigger);
+    setRenderTrigger(!renderTrigger);
   };
 
   return (

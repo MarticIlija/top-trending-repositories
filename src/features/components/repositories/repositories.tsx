@@ -17,7 +17,7 @@ export const Repositories = ({
   return (
     <>
       {isEmpty(repositories) && (
-        <div className="flex w-full prose text-lg font-bold justify-center">
+        <div className="flex w-full prose text-xl font-bold justify-center mt-6">
           No results found for selected filter parameters
         </div>
       )}
