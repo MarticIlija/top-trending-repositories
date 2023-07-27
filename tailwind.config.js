@@ -4,5 +4,9 @@ export default {
   theme: {
     extend: {},
   },
+  variants: {
+    boxShadow: ["active"],
+    extend: {},
+  },
   plugins: [require("@tailwindcss/typography")],
 };

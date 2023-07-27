@@ -1,5 +1,5 @@
 export interface PaginationProps {
-  totalCount: number;
+  totalCount?: number;
   page: number;
   setPage: (page: number) => void;
 }

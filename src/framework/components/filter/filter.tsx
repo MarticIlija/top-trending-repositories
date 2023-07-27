@@ -4,12 +4,23 @@ import { FilterWrapper } from "../filter-wrapper/filter-wrapper";
 import { IconButton } from "../icon-button/icon-button";
 import { FilterProps } from "./types";
 
-export const Filter = ({ children }: FilterProps) => {
+export const Filter = ({
+  children,
+  refreshList,
+  fetchTrigger,
+}: FilterProps) => {
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   return (
     <>
-      <div className="flex justify-end w-full">
+      <div className="flex justify-between w-full">
+        <IconButton
+          onClick={() => {
+            refreshList(!fetchTrigger);
+          }}
+          icon={<div className="font-semibold">Refresh List</div>}
+          className="w-fit h-fit px-4"
+        />
         <IconButton
           icon={
             <FilterIcon

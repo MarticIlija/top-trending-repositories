@@ -29,6 +29,7 @@ export const TopRatedRepositories = () => {
   const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
   const [selectedRepositories, setSelectedRepositories] = useState<Items[]>([]);
   const [renderTrigger, setRenderTrigger] = useState(false);
+  const [fetchTrigger, setFetchTrigger] = useState(false);
   const starredRepositories = getStarredRepositories();
 
   useEffect(() => {
@@ -39,10 +40,11 @@ export const TopRatedRepositories = () => {
       },
       setter: setRepositories,
     });
-  }, [page, selectedOrder]);
+  }, [page, selectedOrder, fetchTrigger]);
 
   useEffect(() => {
     setSelectedRepositories(repositories?.items as Items[]);
+    setSelectedOption(Options.ALL);
   }, [repositories]);
 
   useEffect(() => {
@@ -100,12 +102,8 @@ export const TopRatedRepositories = () => {
     <>
       <ApplicationLoader show={isEmpty(repositories)} />
       <div className="flex flex-col gap-6 w-full h-full pb-28 pt-6 px-44 xl:px-48 items-center justify-center">
-        <PaginationControlled
-          totalCount={repositories?.total_count as number}
-          page={page}
-          setPage={setPage}
-        />
-        <Filter>
+        <PaginationControlled page={page} setPage={setPage} />
+        <Filter refreshList={setFetchTrigger} fetchTrigger={fetchTrigger}>
           <FilterChips
             title="Languages:"
             elements={filterLanguages}
