@@ -1,11 +1,12 @@
 import { Items } from "../../../api";
+import { LanguageFilterEnum } from "../../../common/enums/LanguageFilter";
 
 const getFilterLanguages = (items: Items[]) => {
   const languageSet: Set<string> = new Set();
   items?.map((item) => {
     if (item?.language) {
       languageSet.add(item?.language);
-    } else languageSet.add("Other");
+    } else languageSet.add(LanguageFilterEnum.OTHER);
   });
   return Array.from(languageSet).sort();
 };
@@ -16,7 +17,7 @@ const getRepositoriesByLanguage = (
 ) => {
   const filteredRepositories = languages
     .map((language) => {
-      if (language !== "Other") {
+      if (language !== LanguageFilterEnum.OTHER) {
         return repositories?.filter(
           (repository) => repository?.language === language
         );
