@@ -6,8 +6,8 @@ import { LanguagesEnum } from "../../../common/enums/Languages";
 const getLogoForLanguage = (language: string) => {
   const enumKey = language?.toUpperCase().replace(" ", "_");
   if (LanguagesEnum[enumKey as keyof typeof LanguagesEnum]) {
-    const noSpaceLanguage = language.replace(/\s+/g, "");
-    const logoName = noSpaceLanguage.toLowerCase().replace("#", "_");
+    const nameWithoutSpace = language.replace(/\s+/g, "");
+    const logoName = nameWithoutSpace.toLowerCase().replace("#", "sharp");
     return `src/assets/img/${logoName}.png`;
   } else return "src/assets/img/other.png";
 };
