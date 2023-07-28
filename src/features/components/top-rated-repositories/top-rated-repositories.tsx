@@ -21,16 +21,18 @@ const { getFilterLanguages, getRepositoriesByLanguage } =
   getTopRatedRepositoriesActions();
 
 export const TopRatedRepositories = () => {
-  const [repositories, setRepositories] = useState<SearchResponse>();
+  const starredRepositories = getStarredRepositories();
+  const [repositoriesResponse, setRepositoriesResponse] =
+    useState<SearchResponse>();
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedOrder, setSelectedOrder] = useState(Order.DESCENDING);
-  const [page, setPage] = useState(1);
-  const [selectedOption, setSelectedOption] = useState(Options.ALL);
+  const [selectedOrder, setSelectedOrder] = useState<Order>(Order.DESCENDING);
+  const [page, setPage] = useState<number>(1);
+  const [selectedOption, setSelectedOption] = useState<Options>(Options.ALL);
   const [filterLanguages, setFilterLanguages] = useState<string[]>([]);
   const [selectedRepositories, setSelectedRepositories] = useState<Items[]>([]);
-  const [renderTrigger, setRenderTrigger] = useState(false);
-  const [fetchTrigger, setFetchTrigger] = useState(false);
-  const starredRepositories = getStarredRepositories();
+  const [renderTrigger, setRenderTrigger] = useState<boolean>(false);
+  const [fetchTrigger, setFetchTrigger] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     getRepositories({
@@ -38,18 +40,19 @@ export const TopRatedRepositories = () => {
         order: selectedOrder,
         page: page.toString(),
       },
-      setter: setRepositories,
+      setter: setRepositoriesResponse,
+      errorSetter: setErrorMessage,
     });
   }, [page, selectedOrder, fetchTrigger]);
 
   useEffect(() => {
-    setSelectedRepositories(repositories?.items as Items[]);
+    setSelectedRepositories(repositoriesResponse?.items as Items[]);
     setSelectedOption(Options.ALL);
-  }, [repositories]);
+  }, [repositoriesResponse]);
 
   useEffect(() => {
     if (selectedOption === Options.ALL)
-      setSelectedRepositories(repositories?.items as Items[]);
+      setSelectedRepositories(repositoriesResponse?.items as Items[]);
     else if (selectedOption === Options.STARRED_ONLY)
       setSelectedRepositories(starredRepositories);
   }, [selectedOption, renderTrigger]);
@@ -100,7 +103,7 @@ export const TopRatedRepositories = () => {
 
   return (
     <>
-      <ApplicationLoader show={isEmpty(repositories)} />
+      <ApplicationLoader show={isEmpty(repositoriesResponse)} />
       <div className="flex flex-col gap-6 w-full h-full pb-28 pt-6 px-44 xl:px-48 items-center justify-center">
         <PaginationControlled page={page} setPage={setPage} />
         <Filter refreshList={setFetchTrigger} fetchTrigger={fetchTrigger}>
@@ -127,6 +130,7 @@ export const TopRatedRepositories = () => {
         </Filter>
         <Repositories
           repositories={filteredRepositories}
+          errorMessage={errorMessage}
           addStarredHandler={addStarredHandler}
           removeStarredHandler={removeStarredHandler}
         />

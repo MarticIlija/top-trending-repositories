@@ -5,6 +5,7 @@ import { DescriptionItem } from "../../../framework/components/description-item/
 import { isEmpty } from "lodash";
 import { StarFullIcon } from "../../../framework/icons/star-full-icon";
 import { RepositoryStar } from "../repository-star/repository-star";
+import { ErrorMessage } from "../../../framework/components/error-message/error-message";
 
 const { getLogoForLanguage, checkIfRepositoryIsStarred } =
   getRepositoriesActions();
@@ -13,9 +14,11 @@ export const Repositories = ({
   repositories,
   addStarredHandler,
   removeStarredHandler,
+  errorMessage,
 }: RepositoriesProps) => {
   return (
     <>
+      <ErrorMessage errorMessage={errorMessage} />
       {isEmpty(repositories) && (
         <div className="flex w-full prose text-xl font-bold justify-center mt-6">
           No results found for selected filter parameters

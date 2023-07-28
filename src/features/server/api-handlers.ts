@@ -10,14 +10,19 @@ const getUrl = ({ order = Order.DESCENDING, page }: SearchParameters) => {
   return `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=${searchOrder}&per_page=30&page=${page}`;
 };
 
-export const getRepositories = ({ searchParams, setter }: QueryParameters) => {
+export const getRepositories = ({
+  searchParams,
+  setter,
+  errorSetter,
+}: QueryParameters) => {
   const url = getUrl(searchParams);
   axios
     .get(url)
     .then((response) => {
       setter(response.data);
+      errorSetter("");
     })
     .catch((error) => {
-      console.error(error);
+      errorSetter(error?.response?.data?.message);
     });
 };
